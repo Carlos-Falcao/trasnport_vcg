@@ -3,7 +3,7 @@ from flask_cors import CORS
 import mysql.connector
 import json
 
-app = Flask(_name_)
+app = Flask(__name__)
 CORS(app)  # Permite comunicação com o front-end
 
 # Configuração do banco
@@ -57,5 +57,5 @@ def get_paradas():
     conn.close()
     return jsonify(paradas)
 
-if _name_ == '_main_':
+if __name__ == '_main_':
     app.run(debug=True)
