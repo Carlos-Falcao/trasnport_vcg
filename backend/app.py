@@ -57,5 +57,5 @@ def get_paradas():
     conn.close()
     return jsonify(paradas)
 
-if __name__ == '_main_':
+if __name__ == '__main__':
     app.run(debug=True)
