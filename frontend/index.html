@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transporte VCG - Ônibus Urbanos</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1>🚍 Transporte VCG</h1>
+        <p>Sistema de informações de ônibus urbanos</p>
+    </header>
+
+    <main>
+        <section id="linhas-section">
+            <h2>Linhas de Ônibus</h2>
+            <div id="linhas-container" class="linhas-grid">
+                <!-- As linhas serão carregadas via JavaScript -->
+            </div>
+        </section>
+
+        <section id="horarios-section" style="display: none;">
+            <h2>Horários da Linha <span id="linha-nome"></span></h2>
+            <button onclick="voltarParaLinhas()">← Voltar para Linhas</button>
+            <div id="horarios-container"></div>
+        </section>
+
+        <section id="paradas-section">
+            <h2>Principais Paradas</h2>
+            <div id="paradas-container"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Transporte VCG - Informações sobre ônibus urbanos</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
