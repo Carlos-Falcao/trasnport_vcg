@@ -1,61 +1,54 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify
 from flask_cors import CORS
-import mysql.connector
-import json
+from supabase import create_client
+import os
 
 app = Flask(__name__)
-CORS(app)  # Permite comunicação com o front-end
+CORS(app)
 
-# Configuração do banco
-def get_db_connection():
-    return mysql.connector.connect(
-        host = 'localhost',
-        user = 'seu_usuario',
-        password = 'sua_senha',
-        database = 'transporte_vcg'
-    )
+# Configuração do Supabase
+SUPABASE_URL = "https://yhjxfyuwizullwyzbwpj.supabase.co"
+SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InloanhmeXV3aXp1bGx3eXpid3BqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA0NTA1MjUsImV4cCI6MjA3NjAyNjUyNX0.ueA8KUm2EZnJ51EUaDut0Cd0EvJXzQ11Zulk8ScdVII"
 
-# Rotas da API
+# Inicializar cliente Supabase
+supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+
+print("✅ Supabase configurado!")
+
 @app.route('/')
 def home():
-    return jsonify({"message": "Sistema de Ônibus VCG API"})
+    return jsonify({"message": "Sistema de Ônibus VCG API com Supabase!"})
 
-# Buscar todas as linhas
-@app.route('/linhas', methods=['GET'])
+@app.route('/linhas')
 def get_linhas():
-    conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM linhas")
-    linhas = cursor.fetchall()
-    cursor.close()
-    conn.close()
-    return jsonify(linhas)
+    try:
+        # Buscar todas as linhas
+        response = supabase.table('linhas').select('*').execute()
+        return jsonify(response.data)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
-# Buscar horários de uma linha
-@app.route('/linhas/<int:linha_id>/horarios', methods=['GET'])
+@app.route('/linhas/<int:linha_id>/horarios')
 def get_horarios_linha(linha_id):
-    conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
-    cursor.execute("""
-        SELECT * FROM horarios 
-        WHERE linha_id = %s 
-        ORDER BY dia_semana, horario
-    """, (linha_id,))
-    horarios = cursor.fetchall()
-    cursor.close()
-    conn.close()
-    return jsonify(horarios)
+    try:
+        # Buscar horários de uma linha específica
+        response = supabase.table('horarios')\
+            .select('*')\
+            .eq('linha_id', linha_id)\
+            .execute()
+        return jsonify(response.data)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
-# Buscar paradas
-@app.route('/paradas', methods=['GET'])
+@app.route('/paradas')
 def get_paradas():
-    conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM paradas")
-    paradas = cursor.fetchall()
-    cursor.close()
-    conn.close()
-    return jsonify(paradas)
+    try:
+        # Buscar todas as paradas
+        response = supabase.table('paradas').select('*').execute()
+        return jsonify(response.data)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
+    print("🚀 Servidor iniciando...")
     app.run(debug=True)
