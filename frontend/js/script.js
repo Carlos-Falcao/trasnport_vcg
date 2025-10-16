@@ -125,5 +125,5 @@ function formatarDiaSemana(dia) {
         'sabado': 'Sábado',
         'domingo': 'Domingo'
     };
-    return dias[dias] || dia;
+    return dias[dia] || dia;
 }
